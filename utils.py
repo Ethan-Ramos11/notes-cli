@@ -28,9 +28,15 @@ SELECT * FROM notes WHERE
 id = ?
 """
 
-    cursor.execute(query, params)
-    conn.commit()
-    conn.close() 
+    cursor.execute(query, (note_id,))
+    result = cursor.fetchone()
+    new_note = None
+    if result:
+        new_note = Note(result[0], result[1], result[2],
+                        result[3], result[4], result[5])
+    conn.close()
+    return new_note
+
 
 def update_note(note: Note):
     pass
