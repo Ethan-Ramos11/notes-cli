@@ -38,8 +38,9 @@ id = ?
     result = cursor.fetchone()
     new_note = None
     if result:
+        tags_list = result[3].split(", ") if result[3] else []
         new_note = Note(result[0], result[1], result[2],
-                        result[3], result[4], result[5])
+                        tags_list, result[4], result[5])
     conn.close()
     return new_note
 
