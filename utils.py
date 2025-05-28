@@ -53,8 +53,12 @@ def update_note(note: Note):
     for key in ["title", "content", "tags"]:
         if getattr(note, key) != getattr(database_note, key):
             change = True
-            fields.append(f"{key} = ?")
-            params.append(getattr(note, key))
+            if key == "tags":
+                fields.append(f"{key} = ?")
+                params.append(", ".join(note.tags))
+            else:
+                fields.append(f"{key} = ?")
+                params.append(getattr(note, key))
     if not change:
         return
     query = f"UPDATE notes SET {", ".join(fields)} WHERE id = ?"

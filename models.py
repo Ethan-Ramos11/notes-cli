@@ -7,7 +7,7 @@ from datetime import datetime
 class Note:
     id: Optional[int]
     title: str
-    content: Optional[str]
+    content: str
     tags: List[str] = field(default_factory=list)
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None

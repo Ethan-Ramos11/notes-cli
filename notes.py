@@ -15,7 +15,6 @@ def main_menu():
             "view a note",
             "update a note",
             "delete a note",
-            "update all notes"
         ]
     ).ask()
 
@@ -36,7 +35,8 @@ def add_note():
     title = questionary.text("What is the title of your note?").ask()
     content = questionary.text("What is the content of your note").ask()
     tags = get_tags()
-    new_note = Note(title, content, tags)
+    new_note = Note(id=None, title=title, content=content, tags=tags)
+    print(new_note)
     create_note(new_note)
     console.print(f"[green]Note '{title}' added successfully![/green]")
 
@@ -111,7 +111,7 @@ def update_note_cli():
     if "tags" in changes:
         note.tags = changes["tags"]
 
-    note.updated_at(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    note.updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     update_note(note)
 
 
@@ -147,4 +147,19 @@ def list_notes_cli():
 
 
 def main():
-    pass
+    while True:
+        choice = main_menu()
+        if choice == "add a note":
+            add_note()
+        elif choice == "view a note":
+            view_note()
+        elif choice == "update a note":
+            update_note_cli()
+        elif choice == "delete a note":
+            delete_note_cli()
+        else:
+            break
+
+
+if __name__ == "__main__":
+    main()
