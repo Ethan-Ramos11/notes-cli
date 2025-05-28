@@ -54,7 +54,18 @@ def delete_note_cli():
 
 
 def list_notes_cli():
-    pass
+    notes = list_notes()
+    if not notes:
+        console.print("[yellow]No notes found.[/yellow]")
+        return
+    table = Table(title="Your Notes", show_lines=True)
+    table.add_column("ID", style="cyan", no_wrap=True)
+    table.add_column("Title", style="magenta")
+    table.add_column("Tags", style="green")
+    for note in notes:
+        tags = ", ".join(note.tags) if hasattr(note, 'tags') else ""
+        table.add_row(str(getattr(note, 'id', '')), note.title, tags)
+    console.print(table)
 
 
 def main():
