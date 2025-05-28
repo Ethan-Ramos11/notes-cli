@@ -58,7 +58,10 @@ def update_note(note: Note):
 
 
 def delete_note(note_id: int):
-    pass
+    conn, cursor = get_connection()
+    cursor.execute("DELETE FROM notes WHERE id = ?", (note_id,))
+    conn.commit()
+    conn.close()
 
 
 def list_notes() -> List[Note]:
