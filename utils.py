@@ -2,16 +2,35 @@ import sqlite3
 from database import get_connection
 from models import Note
 from typing import List, Optional
+from datetime import datetime
 
 
 def create_note(note: Note):
     conn, cursor = get_connection()
-    
+    query = """
+INSERT INTO notes (title, content, tags, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?)
+"""
+    params = [note.title, note.content, ", ".join(
+        note.tags),
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ]
+    cursor.execute(query, params)
+    conn.commit()
+    conn.close()
 
 
 def get_note(note_id: int) -> Optional[Note]:
-    pass
+    conn, cursor = get_connection()
+    query = """
+SELECT * FROM notes WHERE
+id = ?
+"""
 
+    cursor.execute(query, params)
+    conn.commit()
+    conn.close() 
 
 def update_note(note: Note):
     pass
