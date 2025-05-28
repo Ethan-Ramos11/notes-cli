@@ -3,7 +3,7 @@ from rich.console import Console
 from rich.table import Table
 from utils import create_note, get_note, update_note, delete_note, list_notes
 from models import Note
-
+from datetime import datetime
 console = Console()
 
 
@@ -64,8 +64,55 @@ def view_note():
     console.print(table)
 
 
+def get_updated_changes():
+    change_title = questionary.confirm(
+        "Do you want to update the title?").ask()
+    changes = {}
+    if change_title:
+        new_title = questionary.text("What is the new title?").ask().strip()
+        changes["title"] = new_title
+
+    change_content = questionary.confirm(
+        "Do you want to update the content?").ask()
+
+    if change_content:
+        new_content = questionary.text(
+            "What is the new content?").ask().strip()
+        changes["content"] = new_content
+
+    change_tags = questionary.confirm("Do you want to update the tags?").ask()
+
+    if change_tags:
+        tags = get_tags()
+        changes["tags"] = tags
+
+    return changes
+
+
 def update_note_cli():
-    pass
+    notes = list_notes()
+    if not notes:
+        console.print("[yellow]No notes to delete.[/yellow]")
+        return
+    choices = [f"{note.id}: {note.title}" for note in notes]
+    selected = questionary.select(
+        "What note would you like to delete?", choices=choices).ask()
+    if not selected:
+        return
+    note_id = int(selected.split(":", 1)[0])
+
+    note = get_note(note_id)
+    changes = get_updated_changes()
+
+    if "title" in changes:
+        note.title = changes["title"]
+    if "content" in changes:
+        note.content = changes["content"]
+    if "tags" in changes:
+        note.tags = changes["tags"]
+
+    note.updated_at(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    update_note(note)
 
 
 def delete_note_cli():
