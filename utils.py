@@ -62,4 +62,9 @@ def delete_note(note_id: int):
 
 
 def list_notes() -> List[Note]:
-    pass
+    conn, cursor = get_connection()
+    cursor.execute("SELECT * FROM notes")
+    results = cursor.fetchall()
+    notes = [Note(*row) for row in results]
+    conn.close()
+    return notes
