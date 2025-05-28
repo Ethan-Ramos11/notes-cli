@@ -19,8 +19,22 @@ def main_menu():
     ).ask()
 
 
+def get_tags():
+    tags = []
+    while True:
+        tag = questionary.text(
+            "Enter a tag (or type 'con' to continue):").ask()
+        if tag == "con":
+            break
+        else:
+            tags.append(tag)
+    return tags
+
+
 def add_note():
-    
+    title = questionary.text("What is the title of your note?").ask()
+    content = questionary.text("What is the content of your note").ask()
+    tags = get_tags()
 
 
 def view_note():
