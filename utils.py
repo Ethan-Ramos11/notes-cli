@@ -39,7 +39,22 @@ id = ?
 
 
 def update_note(note: Note):
-    pass
+    conn, cursor = get_connection()
+    database_note = get_note(note.id)
+    fields, params = [], []
+    change = False
+    for key in ["title", "content", "tags"]:
+        if getattr(note, key) != getattr(database_note, key):
+            change = True
+            fields.append(f"{key} = ?")
+            params.append(getattr(note, key))
+    if not change:
+        return
+    query = f"UPDATE notes SET {", ".join(fields)} WHERE id = ?"
+    params.append(note.id)
+    cursor.execute(query, params)
+    conn.commit()
+    conn.close()
 
 
 def delete_note(note_id: int):
