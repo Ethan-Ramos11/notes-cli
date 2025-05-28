@@ -50,7 +50,18 @@ def update_note_cli():
 
 
 def delete_note_cli():
-    pass
+    notes = list_notes()
+    if not notes:
+        console.print("[yellow]No notes to delete.[/yellow]")
+        return
+    choices = [f"{note.id}: {note.title}" for note in notes]
+    selected = questionary.select(
+        "What note would you like to delete?", choices=choices).ask()
+    if not selected:
+        return
+    note_id = int(selected.split(":", 1)[0])
+    delete_note(note_id)
+    console.print(f"[red]Note {note_id} deleted.[/red]")
 
 
 def list_notes_cli():
@@ -66,6 +77,7 @@ def list_notes_cli():
         tags = ", ".join(note.tags) if hasattr(note, 'tags') else ""
         table.add_row(str(getattr(note, 'id', '')), note.title, tags)
     console.print(table)
+    return notes
 
 
 def main():
