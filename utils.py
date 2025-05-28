@@ -11,11 +11,17 @@ def create_note(note: Note):
 INSERT INTO notes (title, content, tags, created_at, updated_at)
 VALUES (?, ?, ?, ?, ?)
 """
-    params = [note.title, note.content, ", ".join(
-        note.tags),
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    ]
+    if note.tags:
+        params = [note.title, note.content, ", ".join(
+            note.tags),
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ]
+    else:
+        params = [note.title, note.content, "",
+                  datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                  datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                  ]
     cursor.execute(query, params)
     conn.commit()
     conn.close()

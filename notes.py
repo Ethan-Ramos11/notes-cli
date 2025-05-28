@@ -20,7 +20,7 @@ def main_menu():
 
 
 def add_note():
-    pass
+    
 
 
 def view_note():
