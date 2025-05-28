@@ -42,7 +42,26 @@ def add_note():
 
 
 def view_note():
-    pass
+    notes = list_notes()
+    if not notes:
+        console.print("[yellow]No notes to view.[/yellow]")
+        return
+    choices = [f"{note.id}: {note.title}" for note in notes]
+    selected = questionary.select(
+        "What note would you like to view?", choices=choices
+    ).ask()
+    if not selected:
+        return
+    note_id = int(selected.split(":", 1)[0])
+    note = get_note(note_id)
+    table = Table(title="Your Notes", show_lines=True)
+    table.add_column("ID", style="cyan", no_wrap=True)
+    table.add_column("Title", style="magenta")
+    table.add_column("Content", style="magenta")
+    table.add_column("Tags", style="green")
+    tags = ", ".join(note.tags) if hasattr(note, 'tags') else ""
+    table.add_row(str(getattr(note, 'id', '')), note.title, note.content, tags)
+    console.print(table)
 
 
 def update_note_cli():
