@@ -2,6 +2,7 @@ import questionary
 from rich.console import Console
 from rich.table import Table
 from utils import create_note, get_note, update_note, delete_note, list_notes
+from models import Note
 
 console = Console()
 
@@ -35,6 +36,9 @@ def add_note():
     title = questionary.text("What is the title of your note?").ask()
     content = questionary.text("What is the content of your note").ask()
     tags = get_tags()
+    new_note = Note(title, content, tags)
+    create_note(new_note)
+    console.print(f"[green]Note '{title}' added successfully![/green]")
 
 
 def view_note():
